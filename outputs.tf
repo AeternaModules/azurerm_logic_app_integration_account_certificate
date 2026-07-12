@@ -1,3 +1,7 @@
+output "logic_app_integration_account_certificates_id" {
+  description = "Map of id values across all logic_app_integration_account_certificates, keyed the same as var.logic_app_integration_account_certificates"
+  value       = { for k, v in azurerm_logic_app_integration_account_certificate.logic_app_integration_account_certificates : k => v.id }
+}
 output "logic_app_integration_account_certificates_integration_account_name" {
   description = "Map of integration_account_name values across all logic_app_integration_account_certificates, keyed the same as var.logic_app_integration_account_certificates"
   value       = { for k, v in azurerm_logic_app_integration_account_certificate.logic_app_integration_account_certificates : k => v.integration_account_name }
