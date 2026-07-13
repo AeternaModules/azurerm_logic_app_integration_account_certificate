@@ -26,22 +26,6 @@ EOT
       key_version  = optional(string)
     }))
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.logic_app_integration_account_certificates : (
-        v.key_vault_key == null || (v.key_vault_key.key_version == null || (length(v.key_vault_key.key_version) > 0))
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.logic_app_integration_account_certificates : (
-        v.public_certificate == null || (length(v.public_certificate) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_logic_app_integration_account_certificate's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -78,7 +62,17 @@ EOT
   #   source:    [from keyvault.ValidateNestedItemName: invalid when len(value) > 127]
   # path: key_vault_key.key_name
   #   source:    [from keyvault.ValidateNestedItemName] !regexp.MustCompile(`^[0-9a-zA-Z-]+$`).MatchString(v.(string))
+  # path: key_vault_key.key_vault_id
+  #   source:    [from validationFunctionForResourceID] !ok
+  # path: key_vault_key.key_vault_id
+  #   source:    [from validationFunctionForResourceID] err != nil
+  # path: key_vault_key.key_version
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: metadata
   #   source:    validation.StringIsJSON(...) - no translation rule yet, add one
+  # path: public_certificate
+  #   condition: length(value) > 0
+  #   message:   must not be empty
 }
 
