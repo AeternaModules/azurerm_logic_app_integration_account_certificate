@@ -8,7 +8,7 @@ output "logic_app_integration_account_certificates_integration_account_name" {
 }
 output "logic_app_integration_account_certificates_key_vault_key" {
   description = "Map of key_vault_key values across all logic_app_integration_account_certificates, keyed the same as var.logic_app_integration_account_certificates"
-  value       = { for k, v in azurerm_logic_app_integration_account_certificate.logic_app_integration_account_certificates : k => v.key_vault_key if v.key_vault_key != null && length(v.key_vault_key) > 0 }
+  value       = { for k, v in azurerm_logic_app_integration_account_certificate.logic_app_integration_account_certificates : k => one(v.key_vault_key) if v.key_vault_key != null && length(v.key_vault_key) > 0 }
 }
 output "logic_app_integration_account_certificates_metadata" {
   description = "Map of metadata values across all logic_app_integration_account_certificates, keyed the same as var.logic_app_integration_account_certificates"
